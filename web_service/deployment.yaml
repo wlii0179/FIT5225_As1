@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudpose-deployment
+  labels:
+    app: cloudpose
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudpose
+  template:
+    metadata:
+      labels:
+        app: cloudpose
+    spec:
+      containers:
+      - name: cloudpose
+        image: cloudpose:latest
+        ports:
+        - containerPort: 60000
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: "512Mi"
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 60000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 60000
+          initialDelaySeconds: 5
+          periodSeconds: 5 
