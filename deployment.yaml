@@ -19,13 +19,14 @@ spec:
         image: cloudpose:latest  # 使用本地构建的镜像
         ports:
         - containerPort: 60000
-        resources:
-          requests:
-            cpu: "0.5"
-            memory: "512Mi"
-          limits:
-            cpu: "0.5"
-            memory: "512Mi"
+        # 移除资源限制，允许Pod使用更多资源
+        # resources:
+        #   requests:
+        #     cpu: "0.5"
+        #     memory: "512Mi"
+        #   limits:
+        #     cpu: "0.5"
+        #     memory: "512Mi"
         livenessProbe:
           httpGet:
             path: /health

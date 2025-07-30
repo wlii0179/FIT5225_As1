@@ -166,7 +166,7 @@ class ExperimentRunner:
         """运行单个实验"""
         print(f"=== 运行实验: {pod_count} Pods, {test_location} ===")
         
-        # 1. 扩展部署
+        # 1. 扩展部署 (无资源限制)
         if not self.scale_deployment(pod_count):
             return None
         
