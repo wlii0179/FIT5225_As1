@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudpose-deployment
+  labels:
+    app: cloudpose
+spec:
+  replicas: 1  # 初始设置为1个pod，后续可以扩展到1,2,3,4
+  selector:
+    matchLabels:
+      app: cloudpose
+  template:
+    metadata:
+      labels:
+        app: cloudpose
+    spec:
+      containers:
+      - name: cloudpose
+        image: cloudpose:latest  # 使用本地构建的镜像
+        ports:
+        - containerPort: 60000
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: "512Mi"
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 60000
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 60000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        env:
+        - name: PYTHONUNBUFFERED
+          value: "1"
+        - name: MODEL_PATH
+          value: "/app/yolo11l-pose.pt"
+        volumeMounts:
+        - name: model-volume
+          mountPath: /app/yolo11l-pose.pt
+          subPath: yolo11l-pose.pt
+      volumes:
+      - name: model-volume
+        configMap:
+          name: cloudpose-model
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudpose-service
+  labels:
+    app: cloudpose
+spec:
+  type: NodePort
+  ports:
+  - port: 60000
+    targetPort: 60000
+    nodePort: 30000  # 外部访问端口
+    protocol: TCP
+  selector:
+    app: cloudpose
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudpose-model
+data:
+  yolo11l-pose.pt: |
+    # 这里需要包含模型文件的内容
+    # 实际部署时需要将模型文件转换为base64并嵌入
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloudpose
+---
+# 网络策略 - 允许入站流量
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cloudpose-network-policy
+  namespace: cloudpose
+spec:
+  podSelector:
+    matchLabels:
+      app: cloudpose
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: default
+    ports:
+    - protocol: TCP
+      port: 60000 
