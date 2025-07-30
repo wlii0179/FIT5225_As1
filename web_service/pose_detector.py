@@ -1,4 +1,80 @@
-from ultralytics import YOLO
+import torch
+from torch.serialization import add_safe_globals
+from ultralytics.nn.tasks import PoseModel
+
+# 添加安全全局设置
+add_safe_globals([PoseModel])
+
+# 修复PyTorch 2.6兼容性问题
+import torch.serialization
+torch.serialization.add_safe_globals([
+    torch.nn.modules.container.Sequential,
+    torch.nn.modules.linear.Linear,
+    torch.nn.modules.conv.Conv2d,
+    torch.nn.modules.batchnorm.BatchNorm2d,
+    torch.nn.modules.activation.ReLU,
+    torch.nn.modules.pooling.MaxPool2d,
+    torch.nn.modules.dropout.Dropout,
+    torch.nn.modules.upsampling.Upsample,
+    torch.nn.modules.padding.ZeroPad2d,
+    torch.nn.modules.normalization.GroupNorm,
+    torch.nn.modules.activation.SiLU,
+    torch.nn.modules.activation.Hardswish,
+    torch.nn.modules.activation.Mish,
+    torch.nn.modules.activation.LeakyReLU,
+    torch.nn.modules.activation.GELU,
+    torch.nn.modules.activation.Swish,
+    torch.nn.modules.activation.HardSigmoid,
+    torch.nn.modules.activation.Tanh,
+    torch.nn.modules.activation.Sigmoid,
+    torch.nn.modules.activation.Softmax,
+    torch.nn.modules.activation.LogSoftmax,
+    torch.nn.modules.activation.PReLU,
+    torch.nn.modules.activation.ELU,
+    torch.nn.modules.activation.CELU,
+    torch.nn.modules.activation.SELU,
+    torch.nn.modules.activation.GLU,
+    torch.nn.modules.activation.Tanhshrink,
+    torch.nn.modules.activation.Hardshrink,
+    torch.nn.modules.activation.Softshrink,
+    torch.nn.modules.activation.Softplus,
+    torch.nn.modules.activation.Softmin,
+    torch.nn.modules.activation.LogSigmoid,
+    torch.nn.modules.activation.Threshold,
+    torch.nn.modules.activation.MultiheadAttention,
+    torch.nn.modules.activation.LayerNorm,
+    torch.nn.modules.activation.InstanceNorm1d,
+    torch.nn.modules.activation.InstanceNorm2d,
+    torch.nn.modules.activation.InstanceNorm3d,
+    torch.nn.modules.activation.LocalResponseNorm,
+    torch.nn.modules.activation.CrossMapLRN2d,
+    torch.nn.modules.activation.AlphaDropout,
+    torch.nn.modules.activation.FeatureAlphaDropout,
+    torch.nn.modules.activation.Dropout1d,
+    torch.nn.modules.activation.Dropout2d,
+    torch.nn.modules.activation.Dropout3d,
+    torch.nn.modules.activation.AlphaDropout,
+    torch.nn.modules.activation.FeatureAlphaDropout,
+    torch.nn.modules.activation.Dropout1d,
+    torch.nn.modules.activation.Dropout2d,
+    torch.nn.modules.activation.Dropout3d,
+    torch.nn.modules.activation.AlphaDropout,
+    torch.nn.modules.activation.FeatureAlphaDropout,
+    torch.nn.modules.activation.Dropout1d,
+    torch.nn.modules.activation.Dropout2d,
+    torch.nn.modules.activation.Dropout3d,
+    torch.nn.modules.activation.AlphaDropout,
+    torch.nn.modules.activation.FeatureAlphaDropout,
+    torch.nn.modules.activation.Dropout1d,
+    torch.nn.modules.activation.Dropout2d,
+    torch.nn.modules.activation.Dropout3d,
+    torch.nn.modules.activation.AlphaDropout,
+    torch.nn.modules.activation.FeatureAlphaDropout,
+    torch.nn.modules.activation.Dropout1d,
+    torch.nn.modules.activation.Dropout2d,
+    torch.nn.modules.activation.Dropout3d,
+])
+
 import cv2
 import numpy as np
 import time
