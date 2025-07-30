@@ -1,0 +1,34 @@
+# 使用更小的基础镜像
+FROM python:3.10-slim
+
+# 设置工作目录
+WORKDIR /app
+
+# 安装系统依赖（只安装绝对必要的）
+RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# 复制requirements文件
+COPY requirements-tiny.txt .
+
+# 安装Python依赖（使用CPU版本的PyTorch）
+RUN pip install --no-cache-dir -r requirements-tiny.txt
+
+# 复制应用代码
+COPY . .
+
+# 设置环境变量
+ENV PYTHONPATH=/app
+
+# 暴露端口
+EXPOSE 60000
+
+# 启动命令
+CMD ["python", "start_server_fixed.py"] 
