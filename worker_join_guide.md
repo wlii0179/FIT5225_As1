@@ -18,7 +18,7 @@ API服务器: 正常
 
 ## 3. 立即生成join命令（Controller节点）
 ```bash
-kubeadm token create --print-join-command
+ww
 ```
 **重要**：API服务器恢复后要立即执行，因为它可能很快又断联！
 

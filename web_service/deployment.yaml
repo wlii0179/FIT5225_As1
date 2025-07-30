@@ -14,18 +14,21 @@ spec:
       labels:
         app: cloudpose
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: izj6c1ctx7gdveo620l4paz
       containers:
       - name: cloudpose
         image: cloudpose:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 60000
         resources:
           requests:
-            cpu: "0.5"
-            memory: "512Mi"
+            cpu: "1.0"
+            memory: "1Gi"
           limits:
-            cpu: "0.5"
-            memory: "512Mi"
+            cpu: "2.0"
+            memory: "2Gi"
         livenessProbe:
           httpGet:
             path: /health
