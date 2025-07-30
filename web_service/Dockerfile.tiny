@@ -16,10 +16,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean
 
 # 复制requirements文件
-COPY requirements-tiny.txt .
+COPY requirements-micro.txt .
 
-# 安装Python依赖（使用CPU版本的PyTorch）
-RUN pip install --no-cache-dir -r requirements-tiny.txt
+# 安装Python依赖（使用更小的PyTorch版本）
+RUN pip install --no-cache-dir -r requirements-micro.txt
 
 # 复制应用代码
 COPY . .
